@@ -18,9 +18,10 @@ repositories {
 }
 
 dependencies {
-    implementation "org.slf4j:slf4j-api:1.7.30"
     implementation "io.netty:netty-handler:${nettyVersion}"
     implementation "io.netty:netty-codec-http:${nettyVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.10.3"
+    implementation "org.slf4j:slf4j-api:1.7.30"
 
     testImplementation "org.junit.jupiter:junit-jupiter-engine:5.6.0"
 }
