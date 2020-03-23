@@ -20,6 +20,8 @@ repositories {
 dependencies {
     implementation "io.netty:netty-handler:${nettyVersion}"
     implementation "io.netty:netty-codec-http:${nettyVersion}"
+    implementation "javax.inject:javax.inject:1"
+    implementation "javax.inject:javax.inject-tck:1"
     implementation "com.fasterxml.jackson.core:jackson-databind:2.10.3"
     implementation "org.slf4j:slf4j-api:1.7.30"
 
