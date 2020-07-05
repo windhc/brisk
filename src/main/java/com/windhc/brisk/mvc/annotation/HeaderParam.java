@@ -5,10 +5,12 @@ import java.lang.annotation.*;
 /**
  * @author windhc
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface PostMapping {
+public @interface HeaderParam {
 
-    String[] value() default {};
+    String name() default "";
+
+    String defaultValue() default "";
 }

@@ -21,7 +21,6 @@ repositories {
 dependencies {
     implementation("io.netty:netty-handler:${nettyVersion}")
     implementation("io.netty:netty-codec-http:${nettyVersion}")
-    implementation("jakarta.ws.rs:jakarta.ws.rs-api:3.0.0-M1")
     implementation("jakarta.inject:jakarta.inject-api:2.0.0-RC4")
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("org.slf4j:slf4j-api:1.7.30")
