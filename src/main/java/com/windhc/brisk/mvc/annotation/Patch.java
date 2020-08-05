@@ -8,11 +8,7 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface GetMapping {
+public @interface Patch {
 
-    /**
-     * The path mapping URIs (e.g. {@code "/hello"}).
-     * Ant-style path patterns are also supported (e.g. {@code "/hello/**"}).
-     */
     String[] value() default {};
 }

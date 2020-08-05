@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface PatchMapping {
+public @interface Delete {
 
     String[] value() default {};
 }
