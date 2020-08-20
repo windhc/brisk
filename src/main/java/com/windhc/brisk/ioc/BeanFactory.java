@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * IOC container interface
+ * bean container interface
  *
  * @author windhc
  */
-public interface Ioc {
+public interface BeanFactory {
 
     /**
      * Add bean to ioc container
