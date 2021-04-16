@@ -3,28 +3,22 @@ package com.windhc.brisk;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.windhc.brisk.exception.BriskException;
 import com.windhc.brisk.ioc.BeanFactory;
 import com.windhc.brisk.ioc.DefaultBeanFactory;
 import com.windhc.brisk.ioc.annotation.Bean;
 import com.windhc.brisk.ioc.annotation.Configuration;
 import com.windhc.brisk.ioc.annotation.Inject;
 import com.windhc.brisk.ioc.bean.BeanDefine;
+import com.windhc.brisk.mvc.RouterHandler;
 import com.windhc.brisk.mvc.annotation.Controller;
-import com.windhc.brisk.mvc.annotation.Get;
 import com.windhc.brisk.scheduling.ScheduleService;
 import com.windhc.brisk.scheduling.annotation.Scheduled;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smartboot.http.server.HttpBootstrap;
-import org.smartboot.http.server.HttpRequest;
-import org.smartboot.http.server.HttpResponse;
-import org.smartboot.http.server.HttpServerHandle;
 import org.smartboot.http.server.handle.HttpRouteHandle;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Set;
 
@@ -95,29 +89,14 @@ public class Brisk {
             }
         }
 
+        RouterHandler routerHandler = new RouterHandler();
         for (BeanDefine beanDefine : beanFactory.getBeanDefines()) {
             // 注册路由
             Class<?> clazz = beanDefine.getClazz();
             Controller controller = clazz.getAnnotation(Controller.class);
             if (controller != null) {
                 for (Method method : clazz.getMethods()) {
-                    Get get = method.getAnnotation(Get.class);
-                    if (get != null) {
-                        for (String path : get.value()) {
-                            logger.info("add route {}", controller.value() + path);
-                            routeHandle.route(controller.value() + path, new HttpServerHandle() {
-                                @Override
-                                public void doHandle(HttpRequest request, HttpResponse response) throws IOException {
-                                    try {
-                                        String invoke = (String) method.invoke(beanDefine.getBean());
-                                        response.write(invoke.getBytes());
-                                    } catch (IllegalAccessException | InvocationTargetException e) {
-                                        throw new BriskException(e);
-                                    }
-                                }
-                            });
-                        }
-                    }
+                    routerHandler.route(beanDefine.getBean(), method, routeHandle, controller.value());
                 }
             }
 
