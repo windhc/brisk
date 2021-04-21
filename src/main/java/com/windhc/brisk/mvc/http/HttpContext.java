@@ -23,4 +23,12 @@ public class HttpContext {
     public HttpResponse response() {
         return this.response;
     }
+
+    public String clientIp() {
+        String ip = this.request.getHeader("X-Forwarded-For");
+        if (ip == null) {
+            ip = this.request.getRemoteAddr();
+        }
+        return ip;
+    }
 }
