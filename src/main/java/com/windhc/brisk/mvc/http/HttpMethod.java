@@ -1,7 +1,7 @@
 package com.windhc.brisk.mvc.http;
 
 /**
- * @author HC
+ * @author windhc
  */
 public enum HttpMethod {
 

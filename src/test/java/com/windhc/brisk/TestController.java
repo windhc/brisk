@@ -1,23 +1,21 @@
 package com.windhc.brisk;
 
-import com.windhc.brisk.mvc.annotation.Controller;
-import com.windhc.brisk.mvc.annotation.Get;
-import com.windhc.brisk.scheduling.annotation.Scheduled;
+import com.windhc.brisk.mvc.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * @author windhc
  */
 @Controller("/test")
 public class TestController {
-    private static final Logger logger = LoggerFactory.getLogger(TestController.class);
+    private static final Logger log = LoggerFactory.getLogger(TestController.class);
 
     @Get("/a")
-    public String a() {
-        return "a";
+    public String a(@QueryParam(name = "p") String p) {
+        return "a" + p;
     }
 
     @Get("/b")
@@ -25,8 +23,14 @@ public class TestController {
         return "b";
     }
 
-    @Scheduled(cron = "0/2 * * * * ?")
-    public void c() {
-        logger.info("TestController c {}", LocalDateTime.now());
+    @Get("/c")
+    public Map<String, String> c() {
+        return Map.of("key1", "value1");
+    }
+
+    @Post("/d")
+    public Map<String, String> d(@RequestBody TestObj obj) {
+        log.info(obj.toString());
+        return Map.of("key1", "value1");
     }
 }

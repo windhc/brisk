@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
  * @author windhc
  */
 public class SmartHttpServer {
-    private static final Logger logger = LoggerFactory.getLogger(SmartHttpServer.class);
+    private static final Logger log = LoggerFactory.getLogger(SmartHttpServer.class);
 
 
 }

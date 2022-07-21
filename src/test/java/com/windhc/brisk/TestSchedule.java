@@ -13,15 +13,15 @@ import java.time.LocalDateTime;
  */
 @Bean
 public class TestSchedule {
-    private static final Logger logger = LoggerFactory.getLogger(TestSchedule.class);
+    private static final Logger log = LoggerFactory.getLogger(TestSchedule.class);
 
     @Inject
     private TestService testService;
 
     @Scheduled(cron = "0/3 * * * * ?")
     public void test1() {
-        logger.info(testService.t());
-        logger.info("TestBean test1 " + LocalDateTime.now());
+        log.info(testService.t());
+        log.info("TestBean test1 " + LocalDateTime.now());
     }
 
 }

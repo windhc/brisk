@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
  * @author windhc
  */
 public final class ScheduleService {
-    private static final Logger logger = LoggerFactory.getLogger(ScheduleService.class);
+    private static final Logger log = LoggerFactory.getLogger(ScheduleService.class);
 
     private ScheduleService() {
     }
@@ -25,7 +25,7 @@ public final class ScheduleService {
     }
 
     public void addSchedule(final String cron, final Object object, final Method method) {
-        logger.info("add schedule {}", cron);
+        log.info("add schedule {}", cron);
         CronUtil.schedule(cron, (Task) () -> {
             try {
                 method.invoke(object);
