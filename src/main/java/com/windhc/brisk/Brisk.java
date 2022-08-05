@@ -99,7 +99,9 @@ public class Brisk {
                 }
             }
         }
-        log.debug("bean: {}", BEAN_FACTORY.getBeans());
+        for (Object bean : BEAN_FACTORY.getBeans()) {
+            log.debug("bean: {}", bean);
+        }
 
         bootstrap = new HttpBootstrap();
         bootstrap.httpHandler(new HttpHandler());

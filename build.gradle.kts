@@ -19,11 +19,11 @@ repositories {
 
 dependencies {
     implementation("org.smartboot.http:smart-http-server:1.1.15")
-    implementation("com.alibaba.fastjson2:fastjson2:2.0.9")
-    implementation("cn.hutool:hutool-all:5.8.3")
+    implementation("com.alibaba.fastjson2:fastjson2:2.0.10")
+    implementation("cn.hutool:hutool-all:5.8.5")
     implementation("org.slf4j:slf4j-api:1.7.36")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.8.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.0")
     testImplementation("ch.qos.logback:logback-core:1.2.11")
     testImplementation("ch.qos.logback:logback-classic:1.2.11")
 }
