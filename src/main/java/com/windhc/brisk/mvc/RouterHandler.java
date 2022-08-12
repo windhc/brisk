@@ -6,6 +6,7 @@ import com.windhc.brisk.Brisk;
 import com.windhc.brisk.exception.BriskException;
 import com.windhc.brisk.ioc.bean.BeanDefine;
 import com.windhc.brisk.mvc.annotation.*;
+import com.windhc.brisk.utils.StrMatchUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smartboot.http.common.utils.AntPathMatcher;
@@ -21,6 +22,7 @@ import java.lang.reflect.Parameter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -88,7 +90,12 @@ public class RouterHandler {
     }
 
     private void handle(HttpRequest request, HttpResponse response, String pathPattern, BeanDefine beanDefine, Method method) {
-        if (antPathMatcher.match(pathPattern, request.getRequestURI())) {
+
+        String regex = "\\{([^}])*\\}";
+        String convertPathPattern = pathPattern.replaceAll(regex, "*");
+
+        String requestURI = request.getRequestURI();
+        if (antPathMatcher.match(convertPathPattern, requestURI)) {
             try {
                 List<Object> args = new ArrayList<>();
                 Parameter[] parameterList = method.getParameters();
@@ -97,6 +104,8 @@ public class RouterHandler {
                         args.add(null);
                         continue;
                     }
+                    handlePathParam(requestURI, pathPattern, parameter, args);
+
                     handleQueryParam(request, parameter, args);
 
                     handleRequestBody(request, parameter, args);
@@ -136,7 +145,7 @@ public class RouterHandler {
         }
     }
 
-    private void handlePathParam(HttpRequest request, Parameter parameter, List<Object> args) {
+    private void handlePathParam(String requestURI, String pathPattern, Parameter parameter, List<Object> args) {
         PathParam pathParam = parameter.getAnnotation(PathParam.class);
         if (pathParam == null) {
             return;
@@ -146,7 +155,9 @@ public class RouterHandler {
             log.warn("parameter name is blank");
             return;
         }
-        String value = request.getParameter(name);
+        StrMatchUtil strMatchUtil = new StrMatchUtil(pathPattern);
+        Map<String, String> match = strMatchUtil.match(requestURI);
+        String value = match.get(name);
         if (value == null && StrUtil.isNotEmpty(pathParam.defaultValue())) {
             args.add(pathParam.defaultValue());
         } else {

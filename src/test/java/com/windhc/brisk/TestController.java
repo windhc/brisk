@@ -33,4 +33,12 @@ public class TestController {
         log.info(obj.toString());
         return Map.of("key1", "value1");
     }
+
+    @Get("/e/{a}/{b}/c")
+    public Map<String, String> e(@PathParam(name = "a") String a, @PathParam(name = "b") String b, @QueryParam(name = "p") String p) {
+        log.info(a);
+        log.info(b);
+        log.info(p);
+        return Map.of("key1", "value1");
+    }
 }

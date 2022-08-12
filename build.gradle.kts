@@ -16,6 +16,12 @@ repositories {
     maven { url = uri("https://maven.aliyun.com/repository/public") }
     mavenCentral()
 }
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
 
 dependencies {
     implementation("org.smartboot.http:smart-http-server:1.1.15")
