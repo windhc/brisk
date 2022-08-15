@@ -11,6 +11,7 @@ import com.windhc.brisk.ioc.annotation.Inject;
 import com.windhc.brisk.ioc.bean.BeanDefine;
 import com.windhc.brisk.mvc.HttpHandler;
 import com.windhc.brisk.mvc.annotation.Controller;
+import com.windhc.brisk.mvc.hook.Interceptor;
 import com.windhc.brisk.scheduling.ScheduleService;
 import com.windhc.brisk.scheduling.annotation.Scheduled;
 import org.slf4j.Logger;
@@ -19,6 +20,9 @@ import org.smartboot.http.server.HttpBootstrap;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -29,9 +33,16 @@ public class Brisk {
 
     public static final BeanFactory BEAN_FACTORY = new DefaultBeanFactory();
 
+    public static final Map<Interceptor, List<String>> INTERCEPTOR_LIST = new LinkedHashMap<>();
+
     private HttpBootstrap bootstrap;
 
     public Brisk() {
+    }
+
+    public Brisk addInterceptor(Interceptor interceptor, List<String> path) {
+        INTERCEPTOR_LIST.put(interceptor, path);
+        return this;
     }
 
     public Brisk start(int port, String basePackage) {
