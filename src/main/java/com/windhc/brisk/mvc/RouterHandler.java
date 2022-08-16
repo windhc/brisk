@@ -6,6 +6,7 @@ import com.windhc.brisk.Brisk;
 import com.windhc.brisk.exception.BriskException;
 import com.windhc.brisk.ioc.bean.BeanDefine;
 import com.windhc.brisk.mvc.annotation.*;
+import com.windhc.brisk.mvc.hook.Interceptor;
 import com.windhc.brisk.utils.StrMatchUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +21,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -89,12 +88,22 @@ public class RouterHandler {
         }
     }
 
-    private void handle(HttpRequest request, HttpResponse response, String pathPattern, BeanDefine beanDefine, Method method) {
+    private void handle(HttpRequest request, HttpResponse response, String pathPattern, BeanDefine controller, Method method) {
 
         String regex = "\\{([^}])*\\}";
         String convertPathPattern = pathPattern.replaceAll(regex, "*");
 
         String requestURI = request.getRequestURI();
+
+        Set<Interceptor> interceptorList = new LinkedHashSet<>();
+        Brisk.INTERCEPTOR_MAP.forEach((interceptor, patternList) -> {
+            for (String pattern : patternList) {
+                if (antPathMatcher.match(pattern, requestURI)) {
+                    interceptorList.add(interceptor);
+                }
+            }
+        });
+
         if (antPathMatcher.match(convertPathPattern, requestURI)) {
             try {
                 List<Object> args = new ArrayList<>();
@@ -111,7 +120,12 @@ public class RouterHandler {
                     handleRequestBody(request, parameter, args);
                 }
 
-                Object result = method.invoke(beanDefine.getBean(), args.toArray());
+                // interceptor before
+                for (Interceptor interceptor : interceptorList) {
+                    interceptor.before(ContextHolder.get());
+                }
+
+                Object result = method.invoke(controller.getBean(), args.toArray());
                 if (result == null) {
                     response.write("".getBytes(StandardCharsets.UTF_8));
                     return;
@@ -121,6 +135,12 @@ public class RouterHandler {
                 } else {
                     response.write(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
                 }
+
+                // interceptor after
+                for (Interceptor interceptor : interceptorList) {
+                    interceptor.after(ContextHolder.get());
+                }
+
             } catch (IllegalAccessException | InvocationTargetException | IOException e) {
                 throw new BriskException(e);
             }

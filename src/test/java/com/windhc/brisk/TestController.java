@@ -14,13 +14,13 @@ public class TestController {
     private static final Logger log = LoggerFactory.getLogger(TestController.class);
 
     @Get("/a")
-    public String a(@QueryParam(name = "p") String p) {
-        return "a" + p;
+    public String a() {
+        return "a";
     }
 
     @Get("/b")
-    public String b() {
-        return "b";
+    public String b(@QueryParam(name = "p") String p) {
+        return "b" + p;
     }
 
     @Get("/c")

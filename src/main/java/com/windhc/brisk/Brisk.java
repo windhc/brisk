@@ -33,7 +33,7 @@ public class Brisk {
 
     public static final BeanFactory BEAN_FACTORY = new DefaultBeanFactory();
 
-    public static final Map<Interceptor, List<String>> INTERCEPTOR_LIST = new LinkedHashMap<>();
+    public static final Map<Interceptor, List<String>> INTERCEPTOR_MAP = new LinkedHashMap<>();
 
     private HttpBootstrap bootstrap;
 
@@ -41,7 +41,7 @@ public class Brisk {
     }
 
     public Brisk addInterceptor(Interceptor interceptor, List<String> path) {
-        INTERCEPTOR_LIST.put(interceptor, path);
+        INTERCEPTOR_MAP.put(interceptor, path);
         return this;
     }
 
