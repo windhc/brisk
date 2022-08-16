@@ -122,7 +122,10 @@ public class RouterHandler {
 
                 // interceptor before
                 for (Interceptor interceptor : interceptorList) {
-                    interceptor.before(ContextHolder.get());
+                    boolean before = interceptor.before(ContextHolder.get());
+                    if (!before) {
+                        return;
+                    }
                 }
 
                 Object result = method.invoke(controller.getBean(), args.toArray());

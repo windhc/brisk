@@ -5,9 +5,11 @@ import com.windhc.brisk.mvc.http.HttpContext;
 /**
  * @author windhc
  */
+@FunctionalInterface
 public interface Interceptor {
 
     boolean before(HttpContext httpContext);
 
-    boolean after(HttpContext httpContext);
+    default void after(HttpContext httpContext) {
+    }
 }

@@ -15,8 +15,7 @@ public class TestInterceptor implements Interceptor {
     }
 
     @Override
-    public boolean after(HttpContext httpContext) {
+    public void after(HttpContext httpContext) {
         log.info("after {}", httpContext.request().getRequestURI());
-        return true;
     }
 }
